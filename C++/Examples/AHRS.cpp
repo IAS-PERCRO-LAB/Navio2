@@ -41,7 +41,7 @@ chrt -f -p 99 PID
 
 AHRS::AHRS(std::unique_ptr <InertialSensor> imu)
 {
-    sensor = move(imu);
+    sensor = std::move(imu);
     q0 = 1; q1 = 0; q2 = 0, q3 = 0; twoKi = 0; twoKp =2;
 }
 void AHRS::update(float dt)
@@ -99,7 +99,7 @@ void AHRS::update(float dt)
         // Reference direction of Earth's magnetic field
         hx = 2.0f * (mx * (0.5f - q2q2 - q3q3) + my * (q1q2 - q0q3) + mz * (q1q3 + q0q2));
         hy = 2.0f * (mx * (q1q2 + q0q3) + my * (0.5f - q1q1 - q3q3) + mz * (q2q3 - q0q1));
-        bx = sqrt(hx * hx + hy * hy);
+        bx = sqrtf(hx * hx + hy * hy);
         bz = 2.0f * (mx * (q1q3 - q0q2) + my * (q2q3 + q0q1) + mz * (0.5f - q1q1 - q2q2));
 
         // Estimated direction of gravity and magnetic field
@@ -282,7 +282,7 @@ void AHRS::setGyroOffset()
     gyroOffset[2] = offset[2];
 }
 
-void AHRS::getEuler(float* roll, float* pitch, float* yaw)
+void AHRS::getEuler(float* roll, float* pitch, float* yaw) const
 {
    *roll = atan2(2*(q0*q1+q2*q3), 1-2*(q1*q1+q2*q2)) * 180.0/M_PI;
    *pitch = asin(2*(q0*q2-q3*q1)) * 180.0/M_PI;
@@ -300,22 +300,22 @@ float AHRS::invSqrt(float x)
     return y;
 }
 
-float AHRS::getW()
+float AHRS::getW() const
 {
     return  q0;
 }
 
-float AHRS::getX()
+float AHRS::getX() const
 {
     return  q1;
 }
 
-float AHRS::getY()
+float AHRS::getY() const
 {
     return  q2;
 }
 
-float AHRS::getZ()
+float AHRS::getZ() const
 {
     return  q3;
 }
@@ -356,7 +356,7 @@ private:
 
 
 
-std::unique_ptr <InertialSensor> get_inertial_sensor( std::string sensor_name)
+std::unique_ptr <InertialSensor> get_inertial_sensor( const std::string& sensor_name)
 {
     if (sensor_name == "mpu") {
         printf("Selected: MPU9250\n");
@@ -369,7 +369,7 @@ std::unique_ptr <InertialSensor> get_inertial_sensor( std::string sensor_name)
         return ptr;
     }
     else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -390,7 +390,7 @@ std::string get_sensor_name(int argc, char *argv[])
         if (argc < 2) {
             printf("Enter parameter\n");
             print_help();
-            return std::string();
+            return {};
         }
 
         // prevent the error message
@@ -403,7 +403,7 @@ std::string get_sensor_name(int argc, char *argv[])
             case 'h': print_help(); return "";
             case '?': printf("Wrong parameter.\n");
                       print_help();
-                      return std::string();
+                      return {};
             }
         }
 
@@ -412,7 +412,7 @@ std::string get_sensor_name(int argc, char *argv[])
         return "mpu";
     }
 
-    return std::string();
+    return {};
 }
 
 //============================== Main loop ====================================
@@ -423,7 +423,7 @@ void imuLoop(AHRS* ahrs, Socket sock)
 
     float roll, pitch, yaw;
 
-    struct timeval tv;
+    struct timeval tv{};
     float dt;
     // Timing data
 
@@ -436,12 +436,12 @@ void imuLoop(AHRS* ahrs, Socket sock)
 
     //----------------------- Calculate delta time ----------------------------
 
-	gettimeofday(&tv,NULL);
+	gettimeofday(&tv,nullptr);
 	previoustime = currenttime;
 	currenttime = 1000000 * tv.tv_sec + tv.tv_usec;
 	dt = (currenttime - previoustime) / 1000000.0;
 	if(dt < 1/1300.0) usleep((1/1300.0-dt)*1000000);
-        gettimeofday(&tv,NULL);
+        gettimeofday(&tv,nullptr);
         currenttime = 1000000 * tv.tv_sec + tv.tv_usec;
 	dt = (currenttime - previoustime) / 1000000.0;
 
@@ -509,12 +509,14 @@ int main(int argc, char *argv[])
 
     if (argc == 5)
         sock = Socket(argv[3], argv[4]);
-    else if ( (get_navio_version() == NAVIO) && (argc == 3) )
+    else {
+        if ((get_navio_version() == NAVIO) && (argc == 3))
             sock = Socket(argv[1], argv[2]);
         else
             sock = Socket();
+    }
 
-    auto ahrs = std::unique_ptr <AHRS>{new AHRS(move(imu)) };
+    auto ahrs = std::unique_ptr <AHRS>{new AHRS(std::move(imu)) };
 
     //-------------------- Setup gyroscope offset -----------------------------
 

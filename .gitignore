@@ -1,3 +1,5 @@
 *.o
 *.a
 /C++/Build
+
+.idea/

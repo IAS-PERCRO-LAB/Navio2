@@ -6,13 +6,16 @@
 #include "ADS1115.h"
 
 
-class ADC_Navio : public ADC
-{
+class ADC_Navio : public ADC {
 public:
     void initialize() override;
-    int get_channel_count(void) override;
+
+    int get_channel_count() override;
+
     int read(int ch) override;
+
     ADC_Navio();
+
     ~ADC_Navio();
 
 private:

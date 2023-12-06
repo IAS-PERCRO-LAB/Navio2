@@ -18,7 +18,6 @@ sudo ./Servo
 #include "Navio+/RCOutput_Navio.h"
 #include "Navio2/RCOutput_Navio2.h"
 #include "Common/Util.h"
-#include <unistd.h>
 #include <memory>
 
 #define SERVO_MIN 1250 /*mS*/
@@ -29,50 +28,43 @@ sudo ./Servo
 
 using namespace Navio;
 
-std::unique_ptr <RCOutput> get_rcout()
-{
-    if (get_navio_version() == NAVIO2)
-    {
-        auto ptr = std::unique_ptr <RCOutput>{ new RCOutput_Navio2() };
+std::unique_ptr<RCOutput> get_rcout() {
+    if (get_navio_version() == NAVIO2) {
+        auto ptr = std::unique_ptr<RCOutput>{new RCOutput_Navio2()};
         return ptr;
-    } else
-    {
-        auto ptr = std::unique_ptr <RCOutput>{ new RCOutput_Navio() };
+    } else {
+        auto ptr = std::unique_ptr<RCOutput>{new RCOutput_Navio()};
         return ptr;
     }
 
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+    auto pwm = get_rcout();
 
-        auto pwm = get_rcout();
+    if (check_apm()) {
+        return 1;
+    }
 
-        if (check_apm()) {
-            return 1;
-        }
-
-        if (getuid()) {
-            fprintf(stderr, "Not root. Please launch like this: sudo %s\n", argv[0]);
-        }
+    if (getuid()) {
+        fprintf(stderr, "Not root. Please launch like this: sudo %s\n", argv[0]);
+    }
 
 
-        if( !(pwm->initialize(PWM_OUTPUT)) ) {
-            return 1;
-        }
-        
-	pwm->set_frequency(PWM_OUTPUT, 50);
+    if (!(pwm->initialize(PWM_OUTPUT))) {
+        return 1;
+    }
 
-	if ( !(pwm->enable(PWM_OUTPUT)) ) {
-	    return 1;
-	}
+    pwm->set_frequency(PWM_OUTPUT, 50);
 
-        while (true) {
-            pwm->set_duty_cycle(PWM_OUTPUT, SERVO_MIN);
-            sleep(1);
-            pwm->set_duty_cycle(PWM_OUTPUT, SERVO_MAX);
-            sleep(1);
-        }
+    if (!(pwm->enable(PWM_OUTPUT))) {
+        return 1;
+    }
 
-    return 0;
+    while (true) {
+        pwm->set_duty_cycle(PWM_OUTPUT, SERVO_MIN);
+        sleep(1);
+        pwm->set_duty_cycle(PWM_OUTPUT, SERVO_MAX);
+        sleep(1);
+    }
 }

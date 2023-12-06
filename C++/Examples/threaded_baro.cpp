@@ -13,12 +13,11 @@ sudo ./threaded_baro
 #include <Common/MS5611.h>
 #include <Common/Util.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <cstdio>
 #include <pthread.h>
 
-void * acquireBarometerData(void * barom)
-{
-    MS5611* barometer = (MS5611*)barom;
+void *acquireBarometerData(void *barom) {
+    MS5611 *barometer = (MS5611 *) barom;
 
     while (true) {
         barometer->refreshPressure();
@@ -33,12 +32,10 @@ void * acquireBarometerData(void * barom)
 
         //sleep(0.5);
     }
-
-    pthread_exit(NULL);
+    pthread_exit(nullptr);
 }
 
-int main()
-{
+int main() {
     if (check_apm()) {
         return 1;
     }
@@ -48,19 +45,15 @@ int main()
 
     pthread_t baro_thread;
 
-    if(pthread_create(&baro_thread, NULL, acquireBarometerData, (void *)&baro))
-    {
+    if (pthread_create(&baro_thread, nullptr, acquireBarometerData, (void *) &baro)) {
         printf("Error: Failed to create barometer thread\n");
         return 0;
     }
 
-    while(true)
-    {
+    while (true) {
         printf("Temperature(C): %f Pressure(millibar): %f\n", baro.getTemperature(), baro.getPressure());
         sleep(1);
     }
 
-    pthread_exit(NULL);
-
-    return 1;
+    pthread_exit(nullptr);
 }

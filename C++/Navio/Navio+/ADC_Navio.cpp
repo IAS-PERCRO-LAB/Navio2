@@ -1,23 +1,19 @@
 #include "ADC_Navio.h"
 
-ADC_Navio::ADC_Navio()
-{
+ADC_Navio::ADC_Navio() = default;
 
-}
+ADC_Navio::~ADC_Navio() = default;
 
-void ADC_Navio::initialize()
-{
+void ADC_Navio::initialize() {
     ADS1115 adc;
 
     adc.setMode(ADS1115_MODE_SINGLESHOT);
     adc.setRate(ADS1115_RATE_860);
 }
 
-int ADC_Navio::read(int ch)
-{
-    if (ch > ARRAY_SIZE(muxes))
-    {
-        fprintf(stderr,"Channel number too large\n");
+int ADC_Navio::read(int ch) {
+    if (ch > ARRAY_SIZE(muxes)) {
+        fprintf(stderr, "Channel number too large\n");
         return -1;
     }
     adc.setMultiplexer(muxes[ch]);
@@ -27,7 +23,6 @@ int ADC_Navio::read(int ch)
     return results[ch];
 }
 
-int ADC_Navio::get_channel_count(void)
-{
+int ADC_Navio::get_channel_count() {
     return ARRAY_SIZE(muxes);
 }

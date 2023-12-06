@@ -12,10 +12,9 @@ make
 #include <Common/MS5611.h>
 #include <Common/Util.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <iostream>
 
-int main()
-{
+int main() {
     MS5611 barometer;
 
     if (check_apm()) {
@@ -35,11 +34,9 @@ int main()
 
         barometer.calculatePressureAndTemperature();
 
-        printf("Temperature(C): %f Pressure(millibar): %f\n", 
-                barometer.getTemperature(), barometer.getPressure());
-                
+        std::cout << "Temperature(C): " << barometer.getTemperature() <<
+                  " Pressure(millibar): " << barometer.getPressure() << std::endl;
+
         sleep(1);
     }
-
-    return 0;
 }

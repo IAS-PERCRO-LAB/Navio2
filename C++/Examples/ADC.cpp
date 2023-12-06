@@ -5,37 +5,30 @@
 #include <Navio+/ADC_Navio.h>
 #include <memory>
 
-#define READ_FAILED -1
+#define READ_FAILED (-1)
 
 
-
-std::unique_ptr <ADC> get_converter()
-{
-    if (get_navio_version() == NAVIO2)
-    {
-        auto ptr = std::unique_ptr <ADC>{ new ADC_Navio2() };
+std::unique_ptr<ADC> get_converter() {
+    if (get_navio_version() == NAVIO2) {
+        auto ptr = std::unique_ptr<ADC>{new ADC_Navio2()};
         return ptr;
-    } else
-    {
-        auto ptr = std::unique_ptr <ADC>{ new ADC_Navio() };
+    } else {
+        auto ptr = std::unique_ptr<ADC>{new ADC_Navio()};
         return ptr;
     }
 
 }
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     if (check_apm()) {
         return 1;
     }
     auto adc = get_converter();
     adc->initialize();
     float results[adc->get_channel_count()] = {0.0f};
-    while (true)
-    {
-        for (int i = 0; i < adc->get_channel_count(); i++)
-        {
+    while (true) {
+        for (int i = 0; i < adc->get_channel_count(); i++) {
             results[i] = adc->read(i);
             if (results[i] == READ_FAILED)
                 return EXIT_FAILURE;
@@ -45,7 +38,6 @@ int main(int argc, char *argv[])
 
         usleep(500000);
     }
-
 
     return 0;
 }

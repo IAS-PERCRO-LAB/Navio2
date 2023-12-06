@@ -11,7 +11,7 @@ twitter.com/emlidtech || www.emlid.com || info@emlid.com
 #define AHRS_HPP
 
 #include <cmath>
-#include <stdio.h>
+#include <cstdio>
 #include <memory>
 #include <Common/InertialSensor.h>
 
@@ -24,18 +24,18 @@ private:
 	float integralFBx, integralFBy, integralFBz;
     std::unique_ptr <InertialSensor> sensor;
 public:
-    AHRS( std::unique_ptr <InertialSensor> imu);
+    explicit AHRS( std::unique_ptr <InertialSensor> imu);
 
     void update(float dt);
     void updateIMU(float dt);
     void setGyroOffset();
-    void getEuler(float* roll, float* pitch, float* yaw);
+    void getEuler(float* roll, float* pitch, float* yaw) const;
 
-    float invSqrt(float x);
-    float getW();
-    float getX();
-    float getY();
-    float getZ();
+    static float invSqrt(float x);
+    float getW() const;
+    float getX() const;
+    float getY() const;
+    float getZ() const;
 };
 
 #endif // AHRS_hpp
