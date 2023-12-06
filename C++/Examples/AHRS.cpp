@@ -23,12 +23,12 @@ kernel is available at emlid.com and priority can be set with chrt command:
 chrt -f -p 99 PID
 */
 
-#include <stdio.h>
+#include <cstdio>
 #include <memory>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <stdint.h>
+#include <string>
 #include <unistd.h>
 #include <sys/time.h>
 #include <Common/MPU9250.h>

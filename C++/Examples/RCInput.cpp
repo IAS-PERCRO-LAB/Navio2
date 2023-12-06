@@ -5,8 +5,9 @@
 #include <Navio+/RCInput_Navio.h>
 #include <Common/Util.h>
 #include <memory>
+#include <cstdlib>
 
-#define READ_FAILED -1
+#define READ_FAILED (-1)
 
 std::unique_ptr <RCInput> get_rcin()
 {
@@ -45,4 +46,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
