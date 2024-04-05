@@ -24,8 +24,14 @@ install(TARGETS navio2
 )
 
 # Install header files to the include directory
-install(DIRECTORY Common/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2)
-install(DIRECTORY Navio2/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2)
+install(DIRECTORY Common/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2
+        FILES_MATCHING PATTERN "*.h"
+)
+install(DIRECTORY Navio2/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2
+        FILES_MATCHING PATTERN "*.h"
+)
 
 # Create a Config.cmake file for find_package
 include(CMakePackageConfigHelpers)
