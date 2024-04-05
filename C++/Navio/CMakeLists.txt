@@ -12,11 +12,12 @@ file(GLOB_RECURSE NAVIO2_SOURCES "Navio2/*.cpp")
 add_library(navio2 STATIC ${COMMON_SOURCES} ${NAVIO2_SOURCES})
 
 # Specify include directories
-target_include_directories(navio2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(navio2 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 
 # Specify installation paths
 include(GNUInstallDirs)
 install(TARGETS navio2
+    EXPORT Navio2Targets
     ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -40,5 +41,12 @@ configure_package_config_file(${CMAKE_CURRENT_LIST_DIR}/Config.cmake.in
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/Navio2Config.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/Navio2ConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Navio2/cmake
+)
+
+# Install the export set for use with the install-tree
+install(EXPORT Navio2Targets
+    FILE Navio2Targets.cmake
+    NAMESPACE Navio2::
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Navio2/cmake
 )
