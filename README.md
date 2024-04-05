@@ -3,6 +3,22 @@ Navio 2
 
 Collection of drivers and examples for Navio 2 - autopilot shield for Raspberry Pi.
 
+## Additions of this fork
+* fix many errors and warnings due to new CXX standards.
+* update GPIO submodule to 1.79.1
+* add `CMakeLists` to Navio2 library, that install the library system-level.
+
+### Build and install Navio2 library
+This enables to use `find_package(Navio2)` in other CMake projects.
+
+```bash
+cd Navio2/C++/Navio
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+```
+
 ## Repository structure
 
 ### C++
