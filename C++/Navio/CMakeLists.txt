@@ -23,13 +23,13 @@ install(TARGETS navio2
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# Install header files to the include directory
+# Install header files to the system include directory.
 install(DIRECTORY Common/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2/Common
         FILES_MATCHING PATTERN "*.h"
 )
 install(DIRECTORY Navio2/
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Navio2/Navio2
         FILES_MATCHING PATTERN "*.h"
 )
 

@@ -1,3 +1,11 @@
 @PACKAGE_INIT@
 
+# Include the targets file. This file includes all the information about the libraries and their properties.
 include("${CMAKE_CURRENT_LIST_DIR}/Navio2Targets.cmake")
+
+# Set the include directories variable (this is the directory where the headers are installed).
+#set(Navio2_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/Navio2")
+set(Navio2_INCLUDE_DIRS "/usr/local/include/Navio2")
+
+# Set the libraries variable (this is the name of the library).
+set(Navio2_LIBRARIES "navio2")
