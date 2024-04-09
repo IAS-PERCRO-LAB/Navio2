@@ -1,18 +1,24 @@
 #include <Navio2/Led_Navio2.h>
+#ifdef NAVIO1
 #include <Navio+/Led_Navio.h>
+#endif
 #include <Common/Util.h>
 #include <unistd.h>
 #include <memory>
 
 
 std::unique_ptr<Led> get_led() {
+#ifdef NAVIO1
     if (get_navio_version() == NAVIO2) {
+#endif
         auto ptr = std::unique_ptr<Led>{new Led_Navio2()};
         return ptr;
+#ifdef NAVIO1
     } else {
         auto ptr = std::unique_ptr<Led>{new Led_Navio()};
         return ptr;
     }
+#endif
 }
 
 int main(int argc, char *argv[]) {

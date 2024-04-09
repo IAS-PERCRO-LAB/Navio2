@@ -1,22 +1,28 @@
 #include <unistd.h>
 #include <cstdio>
+#include <cstdlib>
 #include <Common/Util.h>
-#include <Navio2/ADC_Navio2.h>
-#include <Navio+/ADC_Navio.h>
 #include <memory>
+#include <Navio2/ADC_Navio2.h>
+#ifdef NAVIO1
+#include <Navio+/ADC_Navio.h>
+#endif
 
 #define READ_FAILED (-1)
 
 
 std::unique_ptr<ADC> get_converter() {
+#ifdef NAVIO1
     if (get_navio_version() == NAVIO2) {
+#endif
         auto ptr = std::unique_ptr<ADC>{new ADC_Navio2()};
         return ptr;
+#ifdef NAVIO1
     } else {
         auto ptr = std::unique_ptr<ADC>{new ADC_Navio()};
         return ptr;
     }
-
+#endif
 }
 
 

@@ -15,8 +15,10 @@ sudo ./Servo
 
 #include <unistd.h>
 #include "Navio2/PWM.h"
-#include "Navio+/RCOutput_Navio.h"
 #include "Navio2/RCOutput_Navio2.h"
+#ifdef NAVIO1
+#include "Navio+/RCOutput_Navio.h"
+#endif
 #include "Common/Util.h"
 #include <memory>
 
@@ -25,18 +27,22 @@ sudo ./Servo
 
 #define PWM_OUTPUT 0
 
-
+#ifdef NAVIO1
 using namespace Navio;
+#endif
 
 std::unique_ptr<RCOutput> get_rcout() {
+#ifdef NAVIO1
     if (get_navio_version() == NAVIO2) {
+#endif
         auto ptr = std::unique_ptr<RCOutput>{new RCOutput_Navio2()};
         return ptr;
+#ifdef NAVIO1
     } else {
         auto ptr = std::unique_ptr<RCOutput>{new RCOutput_Navio()};
         return ptr;
     }
-
+#endif
 }
 
 int main(int argc, char *argv[]) {

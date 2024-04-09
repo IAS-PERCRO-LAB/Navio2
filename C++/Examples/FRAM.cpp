@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <Common/Util.h>
+#ifdef NAVIO1
 #include <Navio+/MB85RC256.h>
+#endif
 
 // 32768 bytes >> 0x8000 >> 15 bit address
 
@@ -11,7 +13,7 @@ int main() {
         return 1;
     }
 
-
+#ifdef NAVIO1
     uint8_t dev_address = 0b1010000;
     uint16_t reg_address = 0;
     uint8_t data = 0xCC;
@@ -66,4 +68,5 @@ int main() {
     }
 
     return 0;
+#endif
 }

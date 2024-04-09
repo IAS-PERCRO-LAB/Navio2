@@ -2,7 +2,9 @@
 #include <cstdio>
 
 #include <Navio2/RCInput_Navio2.h>
+#ifdef NAVIO1
 #include <Navio+/RCInput_Navio.h>
+#endif
 #include <Common/Util.h>
 #include <memory>
 #include <cstdlib>
@@ -10,13 +12,17 @@
 #define READ_FAILED (-1)
 
 std::unique_ptr<RCInput> get_rcin() {
+#ifdef NAVIO1
     if (get_navio_version() == NAVIO2) {
+#endif
         auto ptr = std::unique_ptr<RCInput>{new RCInput_Navio2()};
         return ptr;
+#ifdef NAVIO1
     } else {
         auto ptr = std::unique_ptr<RCInput>{new RCInput_Navio()};
         return ptr;
     }
+#endif
 }
 
 

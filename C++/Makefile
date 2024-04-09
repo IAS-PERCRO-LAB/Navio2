@@ -2,6 +2,9 @@ CXX ?= g++
 CFLAGS = -std=gnu++11
 LDFLAGS = -lnavio -lrt -lpthread -lpigpio
 
+# Define NAVIO+ macro if needed
+# CFLAGS += -DNAVIO1
+
 LIBDIR= $(CURDIR)/Navio
 PIGPIODIR= $(LIBDIR)/pigpio
 SOURCEDIR = $(CURDIR)/Examples
@@ -23,7 +26,7 @@ lib:
 $(BUILDDIR)/%: $(SOURCEDIR)/%.cpp lib
 	@mkdir -p $(BUILDDIR)
 	$(CXX) $(CFLAGS) $(INCLUDES) $< $(LIB_INCLUDES) $(LDFLAGS) -o $@
-		
+
 clean:
 	$(MAKE) -C $(LIBDIR) clean
 	rm -rf $(BUILDDIR)
