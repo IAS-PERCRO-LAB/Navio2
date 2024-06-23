@@ -1,4 +1,4 @@
-Navio 2 for Rasbian 12
+Navio 2 for Debian 12
 =====
 
 Collection of drivers and examples for Navio 2 - autopilot shield for Raspberry Pi.
