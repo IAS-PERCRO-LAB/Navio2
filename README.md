@@ -1,10 +1,10 @@
-Navio 2
+Navio 2 for Rasbian 12
 =====
 
 Collection of drivers and examples for Navio 2 - autopilot shield for Raspberry Pi.
 
 ## Additions of this fork
-* fix many errors and warnings due to new CXX standards.
+* fix many errors and warnings due to new CXX 11 standards
 * update GPIO submodule to 1.79.1
 * add `CMakeLists` to Navio2 library, that install the library system-level.
 
